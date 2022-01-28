@@ -6,6 +6,7 @@ exts = [
     "cogs.configcmd",
     "cogs.counting",
     "cogs.currency",
+    "cogs.emoji",
     "cogs.emotion",
     "cogs.errorhandler",
     "cogs.events",
