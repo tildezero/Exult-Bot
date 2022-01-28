@@ -2,7 +2,7 @@ Exult Bot
 #########
 
 .. image:: https://discord.com/api/guilds/912148314223415316/embed.png
-   :target: https://discord.gg/NAFTAtAz5d
+   :target: https://exult.games/discord
    :alt: Discord server invite
 `Invite the Bot <https://bot.exult.games/invite>`_
 
