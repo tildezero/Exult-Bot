@@ -9,10 +9,10 @@ Exult Bot
 Table of Contents
 *****************
 
-- `Owner's Links <https://github.com/andeh-py/exult-bot/blob/main/README.rst#L17>`_
-- `About Exult Bot <https://github.com/andeh-py/exult-bot/blob/main/README.rst#L28>`_
-- `Exult Bot Feature Progression <https://github.com/andeh-py/exult-bot/blob/main/README.rst#L39>`_
-- `Requirements for Contributors <https://github.com/andeh-py/exult-bot/blob/main/README.rst#L136>`_
+- `Owner's Links <https://github.com/andeh-py/exult-bot/blob/main/README.rst#owners-links>`_
+- `About Exult Bot <https://github.com/andeh-py/exult-bot/blob/main/README.rst#about-exult-bot>`_
+- `Exult Bot Feature Progression <https://github.com/andeh-py/exult-bot/blob/main/README.rst#exult-bot-feature-progression>`_
+- `Requirements for Contributors <https://github.com/andeh-py/exult-bot/blob/main/README.rst#requirements-for-contributors>`_
 
 Owner's Links
 ***************
