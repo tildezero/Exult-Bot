@@ -14,7 +14,7 @@ class Emojis(commands.Cog):
     @emoji.command()
     @commands.has_permissions(manage_emojis=True)
     async def add(self, ctx, name: str, link: str):
-        async with aiohttp.ClientSession() as ses:
+        async with self.bot.session as ses:
             async with ses.get(link) as res:
                 data = await res.read()
         e = await ctx.guild.create_custom_emoji(name=name, image=data)
