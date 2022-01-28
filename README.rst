@@ -86,6 +86,9 @@ Exult Bot Feature Progression
      - Meme Command
    * - 
      -
+     - Music Feature
+   * - 
+     -
      - Mute Command
    * - 
      -
