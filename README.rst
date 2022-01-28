@@ -64,7 +64,7 @@ Exult Bot Feature Progression
      - Suggestions Features
      - Counting Feature
    * - Modstats Command
-     -
+     - Emoji Commands
      - Emotion Feature
    * - Nickname Command
      -
