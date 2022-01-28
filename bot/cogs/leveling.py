@@ -14,7 +14,7 @@ EXP_PER_MESSAGE = 5
 # Exult's Formula by Ethan
 # reference: https://cdn.discordapp.com/attachments/882769875196600370/927628329174057050/unknown.png
 def exults_formula(lvl) -> int:
-    return round((pi**-(e**(1/6*gamma(pi))/10)) * (((lvl*2)**1.078)*cosh(pi))/10)*100
+    return round(0.9803061089598281*((lvl*2)**1.078))*100
 
 
 class LevelingDbClient:
