@@ -13,14 +13,16 @@ EXP_PER_MESSAGE = 5
 
 # Exult's Formula by Ethan
 # reference: https://cdn.discordapp.com/attachments/882769875196600370/927628329174057050/unknown.png
+
+
 def exults_formula(lvl) -> int:
-    return round((pi**-(e**(1/factorial(3)*gamma(pi))/10))*(log(e**(lvl*2)**1.078)*cosh(pi))*10/100)*100
+    return round((pi**-(e**(1/6*gamma(pi))/10)) * (((lvl*2)**1.078)*cosh(pi))/10)*100
 
 
 class LevelingDbClient:
     def __init__(self, bot):
         self.bot = bot
-    
+
     async def add_xp(self, user, ctx):
         if ctx.guild.id == 912148314223415316:
             x = LevelingDB(self.bot.db)
@@ -30,7 +32,7 @@ class LevelingDbClient:
 
             if int(res[0][0]) >= exults_formula(int(res[0][1])):
                 await x.levelup(user.id, user.guild, int(res[0][0]) - exults_formula(int(res[0][1])))
-                
+
                 try:
                     msg = await x.get_custom_message(ctx.guild.id)
                 except:
@@ -48,9 +50,8 @@ class LevelingDbClient:
                 if channel:
                     channel = self.bot.get_channel(int(channel[0][0]))
                     return await channel.send(msg)
-                
-                await ctx.channel.send(msg)
 
+                await ctx.channel.send(msg)
 
 
 class Leveling(commands.Cog):
@@ -58,7 +59,7 @@ class Leveling(commands.Cog):
         self.bot = bot
         self.client = LevelingDbClient(bot)
         self.db = LevelingDB(bot.db)
-    
+
     # setbio command
     @commands.command(slash_command=True, aliases=["sb"])
     @commands.cooldown(1, 30, commands.BucketType.user)
@@ -66,7 +67,7 @@ class Leveling(commands.Cog):
         if ctx.guild.id == 912148314223415316:
             if not msg:
                 return await ctx.send("Please provide a message to set as your bio.")
-            
+
             await self.db.set_bio(ctx.author.id, msg)
 
             await ctx.send("Done! Your bio has been set to {}.".format(msg))
@@ -85,7 +86,7 @@ class Leveling(commands.Cog):
                 percentage = 0
             else:
                 percentage = round(int(xp)/exults_formula(int(lvl))*100)
-            
+
             bio = await self.db.get_bio(member.id)
 
             user_data = {
@@ -100,10 +101,12 @@ class Leveling(commands.Cog):
 
             background = Editor(Canvas((934, 282), "#352a2a"))
             try:
-                profile = Editor(f"assets/{member.name}_pfp.png").resize((200, 200)).circle_image()
+                profile = Editor(
+                    f"assets/{member.name}_pfp.png").resize((200, 200)).circle_image()
             except:
                 await member.avatar.save(f"assets/{member.name}_pfp.png")
-                profile = Editor(f"./assets/{member.name}_pfp.png").resize((200, 200)).circle_image()
+                profile = Editor(
+                    f"./assets/{member.name}_pfp.png").resize((200, 200)).circle_image()
 
             background = Editor(Canvas((800, 240), color="#23272A"))
 
@@ -111,19 +114,22 @@ class Leveling(commands.Cog):
             # profile_image = load_image(str(ctx.author.avatar_url))
             # profile = Editor(profile_image).resize((200, 200))
 
-
             font_40 = Font.poppins(size=40)
             font_20 = Font.montserrat(size=20)
             font_25 = Font.poppins(size=25)
             font_40_bold = Font.poppins(size=40, variant="bold")
 
             background.paste(profile, (20, 20))
-            background.text((240, 20), user_data["name"], font=font_40, color="white")
-            background.text((240, 80), user_data["bio"], font=font_20, color="white")
+            background.text(
+                (240, 20), user_data["name"], font=font_40, color="white")
+            background.text(
+                (240, 80), user_data["bio"], font=font_20, color="white")
             background.text((250, 170), "LVL", font=font_25, color="white")
-            background.text((310, 155), user_data["level"], font=font_40_bold, color="white")
+            background.text(
+                (310, 155), user_data["level"], font=font_40_bold, color="white")
 
-            background.rectangle((390, 170), 360, 25, outline="white", stroke_width=2)
+            background.rectangle((390, 170), 360, 25,
+                                 outline="white", stroke_width=2)
             background.bar(
                 (394, 174),
                 352,
@@ -133,14 +139,17 @@ class Leveling(commands.Cog):
                 stroke_width=2,
             )
 
-            background.text((390, 135), "Rank : 0", font=font_25, color="white")
+            background.text((390, 135), "Rank : 0",
+                            font=font_25, color="white")
             background.text(
                 (750, 135), f"XP : {user_data['xp']}/{user_data['xp2']}", font=font_25, color="white", align="right"
             )
-            file = discord.File(fp=background.image_bytes, filename=f"{member.name}_rank.png")
+            file = discord.File(fp=background.image_bytes,
+                                filename=f"{member.name}_rank.png")
             await ctx.send(file=file)
 
             os.remove(f"assets/{member.name}_pfp.png")
+
 
 def setup(bot):
     bot.add_cog(Leveling(bot))
