@@ -16,7 +16,8 @@ from database.prefix import PrefixDB
 from info import cogs
 import json
 
-from waifuim import WaifuAioClient
+import waifuim
+from waifuim import WaifuAioClient, WaifuException
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
@@ -67,7 +68,6 @@ class Exult(commands.AutoShardedBot):
         
     arrow = "<a:arrow:882812954314154045>"
     red = 0xfb5f5f
-    wf = WaifuAioClient(appname="Varietas")
 
 bot = Exult()
 bot.loop = asyncio.get_event_loop()
@@ -77,6 +77,8 @@ bot.remove_command("help")
 async def run_bot():
     try:
         bot.pool = await asyncpg.create_pool(config.PSQL_URI)
+        bot.session = aiohttp.ClientSession()
+        bot.wf = WaifuAioClient(appname="Exult", session=bot.session)
     except (ConnectionError, asyncpg.exceptions.CannotConnectNowError):
         bot.logger.critical("Could not connect to psql.")
         
@@ -90,6 +92,8 @@ async def close_bot():
     for task in asyncio.all_tasks(loop=bot.loop):
         task.cancel()
         bot.logger.info("Cancelled running task")
+    await bot.session.close()
+    bot.logger.info("Bot AIOHTTP client session closed")
 
 try:
     bot.loop.run_until_complete(run_bot())
