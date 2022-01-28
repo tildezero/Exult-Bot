@@ -40,7 +40,7 @@ class Exult(commands.AutoShardedBot):
         )
         self.db = db.Database()
         self.logger = logging.getLogger(__name__)
-        self.owner_ids=[839248459704959058,508346978288271360, 635971624406876170]
+        self.owner_ids=[]
 
     async def _init(self):
         connection = self.db.get_connection()
