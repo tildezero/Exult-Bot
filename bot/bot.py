@@ -13,6 +13,7 @@ import aiohttp
 import config
 from database import db
 from database.prefix import PrefixDB
+from tools.components import SuggestVotes
 from info import cogs
 import json
 
@@ -31,6 +32,7 @@ async def get_prefix(bot, msg):
 
 class Exult(commands.AutoShardedBot):
     def __init__(self):
+        self.startTime = time.time()
         self.__version__ = "0.0.1"
         super().__init__(
             activity=discord.Activity(type=discord.ActivityType.watching, name="Verification Coming Soon!"),
@@ -68,6 +70,16 @@ class Exult(commands.AutoShardedBot):
         
     arrow = "<a:arrow:882812954314154045>"
     red = 0xfb5f5f
+    persistent_views_added = False
+
+    async def on_ready(self):
+        print(f"Loaded {len(self.cogs)} cogs, with {len(self.all_commands)} commands.")
+        if not self.persistent_views_added:
+            self.add_view(SuggestVotes(self))
+            print("Persistent views added")
+            self.persistent_views_added = True
+            print(f"Successfully logged in to {self.user}. ({round(self.latency*1000)}ms)")
+            print(f"Startup time: {round(time.time() - bot.startTime)}s")
 
 bot = Exult()
 bot.loop = asyncio.get_event_loop()
@@ -77,8 +89,11 @@ bot.remove_command("help")
 async def run_bot():
     try:
         bot.pool = await asyncpg.create_pool(config.PSQL_URI)
+        print(f"Database Pool Created. ({round(await bot.get_latency()*1000, 2)}ms)")
         bot.session = aiohttp.ClientSession()
+        print("Aiohttp Session Started.")
         bot.wf = WaifuAioClient(appname="Exult", session=bot.session)
+        print("Waifu Client Started.")
     except (ConnectionError, asyncpg.exceptions.CannotConnectNowError):
         bot.logger.critical("Could not connect to psql.")
         
