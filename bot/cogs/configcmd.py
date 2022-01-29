@@ -8,11 +8,15 @@ from database.suggestions import SuggestDB
 from tools.components import (
     SuggestConfCatView, 
     SuggestConfChanView,
-    SuggestConfSafeCat,
-    SuggestConfSafeChan, 
     SuggestConfSafemode,
     SuggestConfCatSafeView,
-    SuggestConfChanSafeView)
+    SuggestConfChanSafeView,
+    SuggestConfEditMainView,
+    SuggestConfEditChannelCatView,
+    SuggestConfEditChannelView,
+    SuggestConfEditSafeCatView,
+    SuggestConfEditSafeChannelView,
+    SuggsetConfDisableView)
 
 class ConfigCMD(commands.Cog):
     def __init__(self, bot):
@@ -124,7 +128,7 @@ class ConfigCMD(commands.Cog):
             await msg.edit(embed=embed, view=None)
 
             """   SELECT CHANNEL WITHIN CHOSEN CATEGORY   """
-            view = SuggestConfChanView(ctx.guild.get_channel(int(cat_id)))
+            view = SuggestConfChanView(ctx.guild.get_channel(int(cat_id)), ctx)
             embed = discord.Embed(description="Please select the channel that you would like suggestions to be sent to below.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Setup")
             msg = await ctx.send(embed=embed, view=view)
             await view.wait()
@@ -133,7 +137,7 @@ class ConfigCMD(commands.Cog):
             await msg.edit(embed=embed, view=None)
 
             """   SAFEMODE ENABLE/DISABLE   """
-            view = SuggestConfSafemode()
+            view = SuggestConfSafemode(ctx)
             embed = discord.Embed(description="**Would you like to enable safemode?**\n\n> Safemode means that a suggestion will have to be allowed by a higher-up before being sent into your suggestions channel. Please select a button below to either enable/disable safemode.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Setup")
             msg = await ctx.send(embed=embed, view=view)
             await view.wait()
@@ -156,7 +160,7 @@ class ConfigCMD(commands.Cog):
                 await msg.edit(embed=embed, view=None)
 
                 """GET SAFEMODE CHANNEL IF ENABLED"""
-                view = SuggestConfChanSafeView(ctx.guild.get_channel(int(safemodecat)))
+                view = SuggestConfChanSafeView(ctx.guild.get_channel(int(safemodecat)), ctx)
                 embed = discord.Embed(description="Select the channel that you want suggestions to await acceptance in.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Setup")
                 msg = await ctx.send(embed=embed, view=view)
                 await view.wait()
@@ -168,7 +172,79 @@ class ConfigCMD(commands.Cog):
             
             """   CONFIRMATION MESSAGE   """
             await ctx.message.reply(embed=discord.Embed(description=f"Suggestions has been successfully setup for `{ctx.guild.name}`!\n\nIf you made a mistake or would like to make edits in future, simply run `{ctx.prefix}config suggestions` again!\n\n**NEW CONFIGURATION:**\nChannel: {ctx.guild.get_channel(int(channel_id)).mention}\nSafemode: {f'Enabled in {ctx.guild.get_channel(int(safemodechannel)).mention}' if safemodebool else 'Disabled'}", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Setup Complete"))
-
+        elif guildconf:
+            """   ASK USER WHAT THEY WOULD LIKE TO EDIT   """
+            view = SuggestConfEditMainView(ctx)
+            if guildconf[1] is None:
+                safemode = "Disabled"
+            else:
+                safemode = f"<#{guildconf[1]}>"
+            embed = discord.Embed(description=f"What suggestions setting would you like to edit?\n\n**Current Configuration:**\n> Suggestions Channel: <#{guildconf[0]}>\n> Safemode: {safemode}", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config")
+            msg = await ctx.send(embed=embed, view=view)
+            await view.wait()
+            setting_to_change = view.values[0]
+            embed.description += f"\n\n**[EXPIRED] - Setting Selected:** `{setting_to_change}`"
+            await msg.edit(embed=embed, view=None)
+            """   IF EDIT SUGGESTIONS CHANNEL:   """
+            if setting_to_change == "Suggestions Channel":
+                """   GET CHANNEL CATEGORY   """
+                embed = discord.Embed(description="Please select the category in which your desired suggestions channel is in below.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon, name="Suggestions Config")
+                view = SuggestConfEditChannelCatView(ctx)
+                msg = await ctx.send(embed=embed, view=view)
+                await view.wait()
+                category = view.values[0]
+                embed.description += f"\n\n**[EXPIRED] - Category Selected:** `{ctx.guild.get_channel(int(category)).name}`"
+                await msg.edit(embed=embed, view=None)
+                """   GET CHANNEL FROM CATEGORY   """
+                embed = discord.Embed(description="Please select the channel that you would like suggestions to be sent to below.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config")
+                view = SuggestConfEditChannelView(self.bot.get_channel(int(category)), ctx)
+                msg = await ctx.send(embed=embed, view=view)
+                await view.wait()
+                channel = view.values[0]
+                embed.description += f"\n\n**[EXPIRED] - Channel Selected:** {ctx.guild.get_channel(int(channel)).mention}"
+                await msg.edit(embed=embed, view=None)
+                """   UPDATE DATABASE   """
+                await SuggestDB(self.bot.db).updatechannel(ctx.guild.id, int(channel))
+                """   SEND CONFIRMATION MESSAGE   """
+                return await ctx.message.reply(embed=discord.Embed(description=f"Suggestion channel has been modified for `{ctx.guild.name}`!\n\nIf you made a mistake or would like to make edits in future, simply run `{ctx.prefix}config suggestions` again!\n\n**NEW CONFIGURATION:**\nChannel: {ctx.guild.get_channel(int(channel)).mention}\nSafemode: {safemode}", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config"))
+            elif setting_to_change == "Safemode":
+                """   GET SAFEMODE CATEGORY   """
+                embed = discord.Embed(description="Please select the category in which your desired safemode channel is in below.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon, name="Suggestions Config")
+                view = SuggestConfEditSafeCatView(ctx, guildconf[1])
+                msg = await ctx.send(embed=embed, view=view)
+                await view.wait()
+                category = view.values[0]
+                if category == "Disable":
+                    await SuggestDB(self.bot.db).updatesafemode(ctx.guild.id, None)
+                    embed.description += f"\n\n**[EXPIRED] -** Safemode has been `disabled`"
+                    return await msg.edit(embed=embed, view=None)
+                embed.description += f"\n\n**[EXPIRED] - Category Selected:** `{ctx.guild.get_channel(int(category)).name}`"
+                await msg.edit(embed=embed, view=None)
+                """   GET SAFEMODE CHANNEL   """
+                embed = discord.Embed(description="Please select the channel that you would like safemode suggestions to be sent to below.", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config")
+                view = SuggestConfEditSafeChannelView(self.bot.get_channel(int(category)), ctx)
+                msg = await ctx.send(embed=embed, view=view)
+                await view.wait()
+                channel = view.values[0]
+                embed.description += f"\n\n**[EXPIRED] - Channel Selected:** {ctx.guild.get_channel(int(channel)).mention}"
+                await msg.edit(embed=embed, view=None)
+                """   UPDATE DATABASE   """
+                await SuggestDB(self.bot.db).updatesafemode(ctx.guild.id, int(channel))
+                """   SEND CONFIRMATION MESSAGE   """
+                return await ctx.message.reply(embed=discord.Embed(description=f"Suggestion channel has been modified for `{ctx.guild.name}`!\n\nIf you made a mistake or would like to make edits in future, simply run `{ctx.prefix}config suggestions` again!\n\n**NEW CONFIGURATION:**\nChannel: {ctx.guild.get_channel(int(guildconf[0])).mention}\nSafemode: <#{channel}>", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config"))
+            elif setting_to_change == "Disable":
+                view = SuggsetConfDisableView(ctx)
+                embed = discord.Embed(description="Are you sure you want to disable the suggestion feature?", colour=self.bot.red).set_author(icon_url=ctx.guild.icon.url, name="Suggestions Config")
+                msg = await ctx.send(embed=embed, view=view)
+                await view.wait()
+                disabled = view.value
+                if disabled:
+                    await SuggestDB(self.bot.db).shutdown(ctx.guild.id)
+                    embed.description += f"\n\n**[EXPIRED] - Option Selected:** `Disable Feature`"
+                    await msg.edit(embed=embed, view=None)
+                elif not disabled:
+                    embed.description += f"\n\n**[EXPIRED] - Option Selected:** `Don't Disable Feature`"
+                    await msg.edit(embed=embed, view=None)
 
 def setup(bot):
     bot.add_cog(ConfigCMD(bot))

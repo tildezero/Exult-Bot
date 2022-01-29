@@ -61,7 +61,7 @@ Exult Bot Feature Progression
      - Marry/divorce Commands
      - Ban Command
    * - Modmail Feature
-     - Suggestions Features
+     - 
      - Counting Feature
    * - Modstats Command
      - Emoji Commands
@@ -111,6 +111,9 @@ Exult Bot Feature Progression
    * - 
      -
      - Slowmode Commands
+   * - 
+     -
+     - Suggestions Features
    * - 
      -
      - Support Command
