@@ -47,7 +47,6 @@ Exult Bot Feature Progression
 .. list-table::
    :widths: 25 25 50
    :header-rows: 1
-
    * - Not Started
      - In Progress
      - Completed
@@ -75,8 +74,8 @@ Exult Bot Feature Progression
    * - Reminder Commands
      -
      - Invite Command
-   * - 
-     -Warning Feature
+   * - Warning Feature
+     -
      - Joke Command
    * - 
      -
