@@ -9,11 +9,3 @@ chat_exporter
 easy-pil==0.1.3
 mee6-py-api
 git+https://github.com/Rapptz/discord-ext/menus
-core-js==3.19.3
-nuxt==2.15.8
-vue==2.6.14
-vue-server-renderer==2.6.14
-vue-template-compiler==2.6.14
-webpack==4.46.0
-tailwindcss==4.2.1
-postcss==8.4.4
