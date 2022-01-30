@@ -75,8 +75,8 @@ Exult Bot Feature Progression
    * - Reminder Commands
      -
      - Invite Command
-   * - Warning Feature
-     -
+   * - 
+     -Warning Feature
      - Joke Command
    * - 
      -
