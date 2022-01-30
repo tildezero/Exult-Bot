@@ -47,6 +47,7 @@ Exult Bot Feature Progression
 .. list-table::
    :widths: 25 25 50
    :header-rows: 1
+
    * - Not Started
      - In Progress
      - Completed
@@ -60,7 +61,7 @@ Exult Bot Feature Progression
      - Marry/divorce Commands
      - Ban Command
    * - Modmail Feature
-     - 
+     - Warning Feature
      - Counting Feature
    * - Modstats Command
      - Emoji Commands
@@ -69,12 +70,12 @@ Exult Bot Feature Progression
      -
      - Fact Command
    * - Reaction Roles Feature
-     -
+     - 
      - Inrole Command
    * - Reminder Commands
      -
      - Invite Command
-   * - Warning Feature
+   * - 
      -
      - Joke Command
    * - 
