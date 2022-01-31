@@ -1,5 +1,8 @@
 <template>
-  <Tutorial/>
+<div class="font-main">
+  <NavBar/>
+  <Landing/>
+</div>
 </template>
 
 <script>

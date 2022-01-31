@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-backing {
+    background-image: url('~/static/ExultPageBG.svg');
+}
+
+.font-main {
+    font-family: 'Work Sans';
+}
+
+.bg-main {
+    background-color: #21293d;
+}
+
+.bg-blue-accent {
+    background-color: #313C4F;
+}
+
+.bg-primary-blue {
+    background-color: #3b5fe1;
+}
+
+.border-primary-blue {
+    border-color: #3b5fe1;
+}
+
+.primary-blue {
+    color: #3b5fe1;
+}
+
+.bg-gray-accent {
+    background-color: #8a8a8a;
+}
+
+.bg-gold-accent {
+    background-color: #C6AF37;
+}
+
+.gold-accent {
+    color: #C6AF37
+}
+
+.border-gold-accent {
+    border-color: #C6AF37;
+}
+
+.bg-red-accent {
+    background-color: #fb5f5f;
+}
+
+.red-accent {
+    color: #fb5f5f;
+}
+
+.tracking-extra {
+    letter-spacing: .25em;
+}
+
+/* extra */
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.bottom-5-5 {
+    bottom: 1.3rem
+}
+
+.translate-x-11-5 {
+    --tw-translate-x: 2.85rem/* 56px */;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.translate-y-3-5 {
+    --tw-translate-y: 0.85rem/* 16px */;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.h-landing {
+    height: 40rem;
+}
+
+.h-landingfull {
+    height: 100vh;
+}
+
+.h-l-half {
+    top: 11rem;
+}
+
+.w-106 {
+    width: 28rem;
+}
+
