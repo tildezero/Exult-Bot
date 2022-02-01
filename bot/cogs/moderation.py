@@ -95,5 +95,20 @@ class Moderation(commands.Cog):
         """Disable a member's timeout"""
         await kimetsu.Timeout(ctx, member, "", reason, True).off()
 
+    @commands.command(aliases=['nick'])
+    @commands.has_permissions(manage_nicknames=True)
+    async def nickname(self, ctx, member: discord.Member, *, name=None):
+        if name == None:
+            await member.edit(nick=None)
+            return await ctx.send(f"succesfully reset the nickname of {str(member)}!")
+        if len(name) < 2 or len(name) > 32:
+            return await ctx.send("error: this nick is too long!")
+        else:
+            await member.edit(nick=name)
+            await ctx.send(f"succesfully changed the nick of {str(member)} to {name}!")
+        
+
+    
+
 def setup(bot):
     bot.add_cog(Moderation(bot))
